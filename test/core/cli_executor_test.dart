@@ -1,7 +1,5 @@
-import 'dart:io';
 
 import 'package:neom_cli/src/core/cli_executor.dart';
-import 'package:neom_cli/src/domain/cli_result.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -9,7 +9,6 @@ class NeomLogger {
   final IOSink? fileSink;
   final Stopwatch _stopwatch = Stopwatch();
   final List<LogEntry> _history = [];
-  String? _activeTask;
 
   NeomLogger({
     this.minLevel = LogLevel.info,
@@ -44,7 +43,6 @@ class NeomLogger {
   // ---- Task tracking with stopwatch ----
 
   void startTask(String taskName) {
-    _activeTask = taskName;
     _stopwatch.reset();
     _stopwatch.start();
     _log(LogLevel.info, 'Iniciando: $taskName', tag: 'NEOM_OPS');
@@ -57,7 +55,6 @@ class NeomLogger {
       'Finalizado: $taskName en ${_stopwatch.elapsedMilliseconds} ms.',
       tag: 'NEOM_OPS',
     );
-    _activeTask = null;
   }
 
   // ---- Core ----
