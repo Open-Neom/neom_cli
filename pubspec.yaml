@@ -1,0 +1,26 @@
+name: neom_cli
+description: >-
+  Cross-platform shell execution engine for Dart. Run commands with timeout,
+  streaming output, and structured results on Windows, macOS, and Linux.
+version: 1.0.0
+homepage: https://github.com/Open-Neom/neom_cli
+repository: https://github.com/Open-Neom/neom_cli
+issue_tracker: https://github.com/Open-Neom/neom_cli/issues
+topics:
+  - cli
+  - shell
+  - process
+  - executor
+  - command-line
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  args: ^2.4.2
+
+dev_dependencies:
+  test: ^1.25.0
+
+executables:
+  neom: neom
