@@ -22,19 +22,40 @@ class CliResult {
     DateTime? timestamp,
   }) : timestamp = timestamp ?? DateTime.now();
 
-  factory CliResult.fromJson(Map<String, dynamic> json) => CliResult(
-    exitCode: json['exitCode'] as int,
-    stdout: json['stdout'] as String? ?? '',
-    stderr: json['stderr'] as String? ?? '',
-    command: json['command'] as String? ?? '',
-    duration: json['durationMs'] != null
-        ? Duration(milliseconds: json['durationMs'] as int)
-        : null,
-    workingDirectory: json['workingDirectory'] as String?,
-    timestamp: json['timestamp'] != null
-        ? DateTime.parse(json['timestamp'] as String)
-        : DateTime.now(),
-  );
+  static int? _parseFiniteInt(Object? raw) {
+    if (raw is num) {
+      if (!raw.isFinite) return null;
+      return raw.toInt();
+    }
+    if (raw is String) {
+      final trimmed = raw.trim();
+      final asInt = int.tryParse(trimmed);
+      if (asInt != null) return asInt;
+      final asDouble = double.tryParse(trimmed);
+      if (asDouble != null && asDouble.isFinite) return asDouble.toInt();
+    }
+    return null;
+  }
+
+  factory CliResult.fromJson(Map<String, dynamic> json) {
+    final durationMs = _parseFiniteInt(json['durationMs']);
+    final rawTs = json['timestamp'];
+    return CliResult(
+      exitCode: _parseFiniteInt(json['exitCode']) ?? -1,
+      stdout: json['stdout']?.toString() ?? '',
+      stderr: json['stderr']?.toString() ?? '',
+      command: json['command']?.toString() ?? '',
+      duration: durationMs != null
+          ? Duration(milliseconds: durationMs < 0 ? 0 : durationMs)
+          : null,
+      workingDirectory: json['workingDirectory'] is String
+          ? json['workingDirectory'] as String
+          : null,
+      timestamp: rawTs is String
+          ? (DateTime.tryParse(rawTs) ?? DateTime.now())
+          : DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'exitCode': exitCode,

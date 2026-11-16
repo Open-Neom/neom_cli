@@ -1,4 +1,4 @@
-library neom_cli;
+library;
 
 // Core
 export 'src/core/cli_executor.dart';
